@@ -1,0 +1,14 @@
+## Place the target GraphML topologies under data/topozoo/ before running.
+topology: data/topozoo/Geant2012.graphml
+topology_name: geant
+out_dir: out
+seed: 7
+
+directed: false
+edge_weight_attr:  # set to e.g. "weight" if present in GraphML
+
+flow_count: 1000000
+flow_model: gravity
+demand_scale: 10.0
+demand_sigma: 0.8
+allow_self_flows: false

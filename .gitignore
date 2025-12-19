@@ -1,0 +1,5 @@
+.venv/*
+dataset/data/*
+dataset/out/*
+*.pyc
+phase-I/out/*
