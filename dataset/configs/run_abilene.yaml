@@ -1,0 +1,14 @@
+## Larger topology example: abilene (Topology Zoo)
+topology: data/topozoo/Abilene.graphml
+topology_name: abilene
+out_dir: out/abilene
+seed: 8
+
+directed: false
+edge_weight_attr:
+
+flow_count: 10000000
+flow_model: gravity
+demand_scale: 10.0
+demand_sigma: 0.8
+allow_self_flows: false

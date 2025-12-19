@@ -1,0 +1,14 @@
+## Larger topology example: Cogentco (Topology Zoo)
+topology: data/topozoo/Cogentco.graphml
+topology_name: cogentco
+out_dir: out/cogent
+seed: 8
+
+directed: false
+edge_weight_attr:
+
+flow_count: 10000000
+flow_model: gravity
+demand_scale: 10.0
+demand_sigma: 0.8
+allow_self_flows: false

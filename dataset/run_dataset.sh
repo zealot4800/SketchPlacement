@@ -4,9 +4,6 @@ set -euo pipefail
 REPO_ROOT="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_PATH="${1:-configs/run.yaml}"
 
-cd "$REPO_ROOT"
-
-echo "[run] Using config: $CONFIG_PATH"
 python -m src.run -c "$CONFIG_PATH"
 
 
