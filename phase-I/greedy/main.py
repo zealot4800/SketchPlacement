@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 from utils.data import FlowDataset, load_paths
-from utils.eval import evaluate_assignment, evaluate_cover
+from utils.eval import evaluate_cover
 
 
 def greedy_set_cover(dataset: FlowDataset) -> Tuple[List[int], Set[int]]:
@@ -61,22 +61,16 @@ def main() -> None:
 
 def run_greedy(dataset: FlowDataset, out_dir: Path) -> None:
     selected_ids, uncovered = greedy_set_cover(dataset)
-    assignments = assign_flows(dataset, selected_ids)
-
     cover_ok, uncovered_list = evaluate_cover(dataset, selected_ids)
-    assignment_eval = evaluate_assignment(dataset, assignments)
 
     solution = {
         "status": "Greedy",
         "objective": len(selected_ids),
         "selected_switch_ids": selected_ids,
         "selected_switch_names": [dataset.sid_to_name[sid] for sid in selected_ids],
-        "assignments_by_id": assignments,
-        "assignments": {dataset.fid_to_name[f]: dataset.sid_to_name[s] for f, s in assignments.items()},
-        "cover_ok": cover_ok,
-        "uncovered_flows": list(uncovered),
-        **assignment_eval,
     }
+    if not cover_ok:
+        solution["uncovered_flows"] = list(uncovered_list)
 
     solution_path = out_dir / "solution.json"
     with solution_path.open("w", encoding="utf-8") as fh:
@@ -84,11 +78,11 @@ def run_greedy(dataset: FlowDataset, out_dir: Path) -> None:
 
     summary_path = out_dir / "summary.txt"
     with summary_path.open("w", encoding="utf-8") as fh:
-        fh.write(f"Flows={dataset.n_flows} | Switches={dataset.n_switches}\n")
         fh.write("Model: greedy\n")
+        fh.write(f"Status: {solution['status']}\n")
+        fh.write(f"Objective: {solution['objective']}\n")
         fh.write(f"Selected switches: {len(selected_ids)}\n")
         fh.write(f"Coverage ok: {cover_ok}\n")
-        fh.write(f"Uncovered flows: {len(uncovered_list)}\n")
 
     print(f"[done] Greedy selected {len(selected_ids)} switches | out={out_dir}")
 
