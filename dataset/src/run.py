@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 from pathlib import Path
+from typing import Optional
 
 if __package__ is None or __package__ == "":
     repo_root = Path(__file__).resolve().parent.parent
@@ -59,8 +60,20 @@ def main() -> None:
     )
     write_flows_csv(flows, out_dir / "flows.csv")
 
+    # Optional per-flow size in Kbps; flows whose path bottleneck is smaller
+    # are rejected (no capacity on path → no flow assigned).
+    flow_size_kb: Optional[float] = config.get("flow_size_kb")  # None = no filter
+    if flow_size_kb is not None:
+        logging.info(
+            "Capacity admission filter enabled: flow_size=%.1f Kbps (%.8f Gbps)",
+            float(flow_size_kb),
+            float(flow_size_kb) * 8 / 1_000_000,
+        )
+
     logging.info("Computing shortest paths for %d flows", len(flows))
-    paths = compute_shortest_paths(graph, flows, weight_attr=weight_attr)
+    paths = compute_shortest_paths(
+        graph, flows, weight_attr=weight_attr, flow_size_kb=flow_size_kb
+    )
     write_paths_jsonl_gz(paths, out_dir / "paths.jsonl.gz")
 
     logging.info("Completed run. Outputs written to %s", out_dir)

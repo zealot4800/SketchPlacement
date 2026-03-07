@@ -5,10 +5,9 @@ out_dir: out/abilene
 seed: 8
 
 directed: false
-edge_weight_attr:
+# Capacity-aware routing: flows prefer higher-capacity links.
+edge_weight_attr: inv_capacity
 
-flow_count: 500000 # Max limit 
-flow_model: gravity
-demand_scale: 10.0
-demand_sigma: 0.8
+flow_count: 500000 # Max limit
+flow_model: size_dist
 allow_self_flows: false

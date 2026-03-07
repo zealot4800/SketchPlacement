@@ -5,10 +5,9 @@ out_dir: out/cogent
 seed: 8
 
 directed: false
+# Capacity-aware routing: flows prefer higher-capacity links.
 edge_weight_attr:
 
 flow_count: 500000 # Max limit
-flow_model: gravity
-demand_scale: 10.0
-demand_sigma: 0.8
+flow_model: size_dist
 allow_self_flows: false
